@@ -10,17 +10,8 @@ source:
   sha256: fa043bbbc426eae1869070d2b6e29a98069615ac00681cdb92e20911d9292260
 
 build:
-  number: 0
-  skip: true  # [win or osx]
-  script: |
-    ./configure \
-      --prefix="$PREFIX" \
-      --enable-ncurses
-    make
-    # TEST hostname.sh requires root permissions to sethostname
-    # As not granted tests are disabled
-    # make check
-    make install
+  number: 1
+  skip: true  # [win]
 
 requirements:
   build:
@@ -50,8 +41,9 @@ about:
       - A talk client and server.
       - A syslogd daemon.
       - Network tools: ping, ping6, traceroute, whois.
-      - Admin tools: hostname, dnsdomainname, ifconfig, logger
+      - Admin tools: hostname, dnsdomainname, ifconfig
     And more...
+    logger is not included in this distribution
   license: GPL-3.0-or-later
   license_file: COPYING
 
