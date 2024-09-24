@@ -19,8 +19,9 @@ Inetutils is a collection of common network programs. It includes:
   - A talk client and server.
   - A syslogd daemon.
   - Network tools: ping, ping6, traceroute, whois.
-  - Admin tools: hostname, dnsdomainname, ifconfig, logger
+  - Admin tools: hostname, dnsdomainname, ifconfig
 And more...
+logger is not included in this distribution
 
 
 Current build status
@@ -45,6 +46,13 @@ Current build status
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=22891&branchName=main">
                   <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/inetutils-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_64_" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>osx_64</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=22891&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/inetutils-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_64_" alt="variant">
                 </a>
               </td>
             </tr>

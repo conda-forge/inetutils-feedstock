@@ -1,0 +1,95 @@
+--- NEWS
++++ NEWS
+@@ -1,5 +1,11 @@
+ GNU inetutils NEWS -- history of user-visible changes.
+ 
++ * Noteworthy changes in release ?.? (????-??-??) [?]
++
++** syslogd: Build fixes for macOS.
++Thanks to Rui Chen and Caleb Xu, see
++<https://savannah.gnu.org/bugs/?65093>.
++
+ * Noteworthy changes in release 2.5 (2023-12-29) [stable]
+ 
+ ** ftpd, rcp, rlogin, rsh, rshd, uucpd
+
+--- libinetutils/libinetutils.h
++++ libinetutils/libinetutils.h
+@@ -22,6 +22,7 @@
+ 
+ #include "argp-version-etc.h"
+ #include <signal.h>
++#include <sys/uio.h>
+ 
+ sighandler_t setsig (int sig, sighandler_t handler);
+ void utmp_init (char *line, char *user, char *id, char *host);
+@@ -31,6 +32,7 @@
+ void logwtmp (const char *, const char *, const char *);
+ void cleanup_session (char *tty, int pty_fd);
+ void logwtmp_keep_open (char *line, char *name, char *host);
++char *inetutils_ttymsg (struct iovec *, int, char *, int);
+ 
+ #ifndef HAVE_STRUCT_IF_NAMEINDEX
+ struct if_nameindex
+
+--- libinetutils/ttymsg.c
++++ libinetutils/ttymsg.c
+@@ -71,7 +71,7 @@
+  * ignored (exclusive-use, lack of permission, etc.).
+  */
+ char *
+-ttymsg (struct iovec *iov, int iovcnt, char *line, int tmout)
++inetutils_ttymsg (struct iovec *iov, int iovcnt, char *line, int tmout)
+ {
+   static char errbuf[MAX_ERRBUF];
+   char *device;
+
+--- src/syslogd.c
++++ src/syslogd.c
+@@ -278,7 +278,6 @@
+ void logmsg (int, const char *, const char *, int);
+ void printline (const char *, const char *);
+ void printsys (const char *);
+-char *ttymsg (struct iovec *, int, char *, int);
+ void wallmsg (struct filed *, struct iovec *);
+ char **crunch_list (char **oldlist, char *list);
+ char *textpri (int pri);
+@@ -1653,7 +1652,7 @@
+ 	  /* Note we're using our own version of ttymsg
+ 	     which does a double fork () to not have
+ 	     zombies.  No need to waitpid().  */
+-	  p = ttymsg (iov, IOVCNT, line, TTYMSGTIME);
++	  p = inetutils_ttymsg (iov, IOVCNT, line, TTYMSGTIME);
+ 	  if (p != NULL)
+ 	    {
+ 	      errno = 0;	/* Already in message. */
+@@ -1666,7 +1665,7 @@
+ 	if (!strncmp (f->f_un.f_user.f_unames[i], UT_USER (utp),
+ 		      sizeof (UT_USER (utp))))
+ 	  {
+-	    p = ttymsg (iov, IOVCNT, line, TTYMSGTIME);
++	    p = inetutils_ttymsg (iov, IOVCNT, line, TTYMSGTIME);
+ 	    if (p != NULL)
+ 	      {
+ 		errno = 0;	/* Already in message. */
+
+--- talkd/announce.c
++++ talkd/announce.c
+@@ -27,7 +27,7 @@
+ #define N_LINES 5
+ #define N_CHARS 256
+ 
+-extern char *ttymsg (struct iovec *iov, int iovcnt, char *line, int tmout);
++#include <libinetutils.h>
+ 
+ typedef struct
+ {
+@@ -112,7 +112,7 @@
+   iovec.iov_base = buf;
+   iovec.iov_len = strlen (buf);
+ 
+-  if ((cp = ttymsg (&iovec, 1, tty, RING_WAIT - 5)) != NULL)
++  if ((cp = inetutils_ttymsg (&iovec, 1, tty, RING_WAIT - 5)) != NULL)
+     {
+       syslog (LOG_ERR, "%s", cp);
+       return FAILED;

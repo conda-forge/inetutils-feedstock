@@ -1,0 +1,13 @@
+--- telnet/sys_bsd.c	2023-12-29 18:34:46.000000000 +0100
++++ telnet/sys_bsd.c.n	2024-09-19 22:59:37.989331784 +0200
+@@ -729,9 +729,7 @@
+   else
+     {
+ #ifdef	SIGINFO
+-      void ayt_status ();
+-
+-      signal (SIGINFO, ayt_status);
++      signal (SIGINFO, (void (*)(int)) ayt_status);
+ #endif
+ #ifdef	SIGTSTP
+       signal (SIGTSTP, SIG_DFL);
