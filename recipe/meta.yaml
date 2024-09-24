@@ -8,6 +8,10 @@ package:
 source:
   url: https://ftp.gnu.org/gnu/inetutils/{{ name }}-{{ version }}.tar.gz
   sha256: fa043bbbc426eae1869070d2b6e29a98069615ac00681cdb92e20911d9292260
+  patches:
+    - fix-2_5_3b0f9a2.patch  # [osx]
+    - fix-2_5_e158f9c.patch  # [osx]
+    - fix-2_5_9a3da00.patch  # [osx]
 
 build:
   number: 1
@@ -18,9 +22,11 @@ requirements:
     - {{ compiler('c') }}
     - {{ stdlib('c') }}
     - make
+    - help2man
   host:
     - ncurses
     - libxcrypt
+    - libidn2
 
 test:
   commands:
