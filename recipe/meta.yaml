@@ -14,7 +14,7 @@ source:
     - fix-2_5_9a3da00.patch  # [osx]
 
 build:
-  number: 1
+  number: 2
   skip: true  # [win]
 
 requirements:
