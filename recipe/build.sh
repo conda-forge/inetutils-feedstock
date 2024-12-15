@@ -1,4 +1,6 @@
 #!/bin/sh
+# Get an updated config.sub and config.guess
+cp $BUILD_PREFIX/share/gnuconfig/config.* ./build-aux
 set -ex
 
 ./configure \
@@ -13,5 +15,7 @@ set -ex
     --with-idn \
     --enable-threads=posix
 make -j${CPU_COUNT}
+if [[ "${CONDA_BUILD_CROSS_COMPILATION:-}" != "1" || "${CROSSCOMPILING_EMULATOR}" != "" ]]; then
 make check
+fi
 make install
