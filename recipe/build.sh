@@ -33,6 +33,7 @@ if [[ ${build_platform} != ${target_platform} ]]; then
     sed -i "s|../\$(TOOL)|${BUILD_PREFIX}/bin/|" man/Makefile.am
 fi
 
+autoreconf --force --verbose --install
 ./configure \
     --prefix="$PREFIX" \
     --disable-silent-rules \
