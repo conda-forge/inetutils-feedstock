@@ -21,12 +21,15 @@ requirements:
   build:
     - {{ compiler('c') }}
     - {{ stdlib('c') }}
+    - autoconf
+    - automake
+    - m4
     - make
     - help2man
+    - sed
     - ncurses               # [build_platform != target_platform]
     - libxcrypt             # [build_platform != target_platform]
     - libidn2               # [build_platform != target_platform]
-    - sed
   host:
     - ncurses
     - libxcrypt
