@@ -46,5 +46,7 @@ autoreconf --force --verbose --install
     --with-idn \
     --enable-threads=posix
 make -j${CPU_COUNT}
+if [[ "${CONDA_BUILD_CROSS_COMPILATION:-}" != "1" || "${CROSSCOMPILING_EMULATOR:-}" != "" ]]; then
 make check
+fi
 make install
