@@ -33,6 +33,10 @@ if [[ ${build_platform} != ${target_platform} ]]; then
     sed -i "s|../\$(TOOL)|${BUILD_PREFIX}/bin/|" man/Makefile.am
 fi
 
+# Skip test that fails on macOS
+if [[ ${target_platform} =~ .*osx.* ]]; then
+    sed -i '/dist_check_SCRIPTS += libls.sh/d' tests/Makefile.am
+fi
 autoreconf --force --verbose --install
 ./configure \
     --prefix="$PREFIX" \
