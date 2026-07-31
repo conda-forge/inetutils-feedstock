@@ -2,6 +2,9 @@
 
 set -o xtrace -o nounset -o pipefail -o errexit
 
+# inetd tests create a configuration file with the value of the USER environment variable
+# it is used to assign permissions to the daemon so the user needs to exists really
+export USER="$(id -un)"
 if [[ ${build_platform} != ${target_platform} ]]; then
     CROSS_LDFLAGS=${LDFLAGS}
     CROSS_CC="${CC}"
